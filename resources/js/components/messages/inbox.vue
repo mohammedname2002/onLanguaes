@@ -238,7 +238,7 @@ export default {
             {
                 axios.get("/api/admin/messages/get/users?search="+this.search+"&page="+this.page+"&group="+this.selectgroup.id).then((response)=>{
             this.countall=response.data.data.countall
-              this.users=this.users.concat(response.data.data.users)
+              this.users=response.data.data.users
               this.countinpage=response.data.meta.total
               this.hasmorepages=response.data.data.has_more
               this.page=response.data.data.next_page

@@ -31,7 +31,7 @@ class AdminApiMessagesController extends Controller
     public function getUsers()
     {
         $stdrepo=new UserRepository();
-        $paginate=request()->paginate??20;
+        $paginate=request()->paginate??50;
         $info=$stdrepo->getScopes(["count"]);
         $students=$stdrepo->index([],[],['name','email','id'],$paginate);
         $students->info=$info;
