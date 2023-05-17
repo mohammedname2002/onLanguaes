@@ -2,13 +2,17 @@
 
 namespace Modules\User\Entities;
 
+use Exception;
+use Carbon\Carbon;
 use App\Models\Session;
 use Conner\Likeable\Like;
 use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\Course\Entities\Note;
 use Modules\User\Entities\Wallet;
 use Modules\User\Entities\Message;
 use Modules\Course\Entities\Course;
+use Modules\Course\Entities\Review;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Course\Entities\WatchLater;
 use Modules\User\Entities\MessageGroup;
@@ -20,8 +24,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Modules\Course\Entities\Note;
-use Modules\Course\Entities\Review;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -246,6 +248,33 @@ public function reviews(): HasMany
     public function likes()
     {
         return $this->morphMany(Like::class,'likeable');
+}
+
+
+
+
+public function scopeCourseSubscribes($q){
+    if(request()->typeusers && request()->typeusers=='unsubscribe'){
+        $q->whereDoesntHave('courses');
+
+    }
+}
+
+public function scopeDate($q){
+    if(request()->date && request()->to){
+        try{
+            if(request()->from){
+                $from=Carbon::createFromFormat('Y-m-d', request()->from);
+            }
+            if(request()->to){
+                $to=Carbon::createFromFormat('Y-m-d', request()->to);
+             }
+             $q->whereBetween('created_at',[$from,$to]);
+
+        }catch(Exception $e){
+
+        }
+    }
 }
 
 

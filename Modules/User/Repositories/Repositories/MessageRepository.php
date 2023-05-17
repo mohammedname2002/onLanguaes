@@ -163,39 +163,55 @@ class MessageRepository implements MessageInterface{
        return $messages;
     }
 
-    // end get Message between selected user and admin
-    public function sendMessageByWebsite($request)
-    {
-        $userrepo=new UserRepository();
-          $users=$userrepo->getmodel([],['name','email','id'],[])->whereIn('id',$request->users)->chunk(50,function($data) use($request){
-             dispatch(new SendMessageByWebsiteJob($data,$request->message,$request->subject,$request->sender_id));
-          });
+   // end get Message between selected user and admin
+   public function sendMessageByWebsite($request)
+   {
+       $userrepo=new UserRepository();
 
-          return [
-             'message'=>[
-                'text'=>'تم إرسال الرسائل إلى الطلاب   بنجاح شكرا لك',
-                'title'=>'تم إرسال الرسائل'
-             ]
-          ];
+        if(!$request->sendToAllusers){
+           $users=$userrepo->getmodel([],['name','email','id'],[])->whereIn('id',$request->users)->chunk(50,function($data) use($request){
+               dispatch(new SendMessageByWebsiteJob($data,$request->message,$request->subject,$request->sender_id));
+            });
+        }
+        else{
+           $users=$userrepo->getmodel([],['name','email','id'],[])->chunk(50,function($data) use($request){
+               dispatch(new SendMessageByWebsiteJob($data,$request->message,$request->subject,$request->sender_id));
+            });
+        }
+
+
+
+         return [
+            'message'=>[
+               'text'=>'تم إرسال الرسائل إلى الطلاب   بنجاح شكرا لك',
+               'title'=>'تم إرسال الرسائل'
+            ]
+         ];
+   }
+
+   public function sendMessagesByEmail($request){
+    $userrepo=new UserRepository();
+    $sender='support.team@onlanguagecourses.com';
+    if($request->sender)
+    $sender=$request->sender;
+
+    if(!$request->sendToAllusers){
+    $users=$userrepo->getmodel([],['name','email','id'],[])->whereIn('id',$request->users)->chunk(50,function($data) use($request,$sender){
+       dispatch(new SendMessageByEmailJob($data,$request->message,$request->subject,$sender));
+    });
+    }
+    else{
+        $users=$userrepo->getmodel([],['name','email','id'],[])->chunk(50,function($data) use($request,$sender){
+            dispatch(new SendMessageByEmailJob($data,$request->message,$request->subject,$sender));
+         });
     }
 
-    public function sendMessagesByEmail($request){
-        $userrepo=new UserRepository();
-        $sender='support.team@onlanguagecourses.com';
-        if($request->sender)
-        $sender=$request->sender;
-
-        $users=$userrepo->getmodel([],['name','email','id'],[])->whereIn('id',$request->users)->chunk(50,function($data) use($request,$sender){
-           dispatch(new SendMessageByEmailJob($data,$request->message,$request->subject,$sender));
-        });
-
-
-        return [
-           'message'=>[
-              'text'=>'تم إرسال الرسائل إلى البريد  بنجاح شكرا لك',
-              'title'=>'تم إرسال الرسائل'
-           ]
-        ];
+    return [
+       'message'=>[
+          'text'=>'تم إرسال الرسائل إلى البريد  بنجاح شكرا لك',
+          'title'=>'تم إرسال الرسائل'
+       ]
+    ];
     }
 
     // send message to outside emails

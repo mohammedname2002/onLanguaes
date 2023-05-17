@@ -13,10 +13,9 @@ class MessageRequest extends FormRequest
      */
     public function rules()
     {
-
         return [
-            'users'=>'required|array',
-            'users.*'=>'required|integer|exists:users,id',
+            'users'=>'required_if:'.$this->sendToAllusers.',false|array',
+            'users.*'=>'required_if:'.$this->sendToAllusers.',false|integer|exists:users,id',
             'message'=>'required|string|min:8',
             'type'=>'required|string|in:email,website,both',
             'subject'=>'required|string|min:3',

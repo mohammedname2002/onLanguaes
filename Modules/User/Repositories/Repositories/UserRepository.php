@@ -25,8 +25,7 @@ class UserRepository implements UserInterface{
     {
         if($paginate>50)
          $paginate=50;
-        return User::with($relations)->select($params)->withCount($count)->search()->group()->paginate($paginate);
-
+        return  User::with($relations)->select($params)->withCount($count)->search()->group()->date()->courseSubscribes()->paginate($paginate);
     }
     public function getScopes($scopes)
     {

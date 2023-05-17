@@ -25,7 +25,7 @@ class EmailController extends Controller
         $email->save();
             $supportEmail = isset(cache()->get('settings')['general_info']['support_email'])?cache()->get('settings')['general_info']['support_email']:
 config('front_settings.general_info.support_email');
-        Mail::to('mohammedname2002@gmail.com')->send (new VisitorContact($data));
+        Mail::to($supportEmail)->send (new VisitorContact($data));
         Session::flash('message', 'Thank you for your email');
         return redirect()->route('contactUs');
     }
