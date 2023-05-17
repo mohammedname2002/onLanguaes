@@ -255,13 +255,14 @@ public function reviews(): HasMany
 
 public function scopeCourseSubscribes($q){
     if(request()->typeusers && request()->typeusers=='unsubscribe'){
-        $q->whereDoesntHave('courses');
+     
+        return  $q->whereDoesntHave('courses');
 
     }
 }
 
 public function scopeDate($q){
-    if(request()->date && request()->to){
+    if(request()->from && request()->to){
         try{
             if(request()->from){
                 $from=Carbon::createFromFormat('Y-m-d', request()->from);
@@ -269,7 +270,12 @@ public function scopeDate($q){
             if(request()->to){
                 $to=Carbon::createFromFormat('Y-m-d', request()->to);
              }
-             $q->whereBetween('created_at',[$from,$to]);
+             else
+             {
+                 $to=now();
+             }
+           
+             return $q->whereBetween('created_at',[$from,$to]);
 
         }catch(Exception $e){
 
