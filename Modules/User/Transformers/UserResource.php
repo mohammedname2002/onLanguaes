@@ -18,7 +18,7 @@ class UserResource extends ResourceCollection
         return [
             'users'=>$this->collection,
             'next_page'=>$this->hasmorePages()?$this->currentPage()+1:1,
-            'countall'=>$this->info->count,
+            'countall'=>$this->total(),
             'has_more'=>$this->hasmorePages(),
         ];
     }

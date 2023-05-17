@@ -47,8 +47,7 @@ class UserRepository implements UserInterface{
 
 
 
-        return User::SelectRaw($search)->search()->date()->courseSubscribes()->first();
-    }
+        return User::SelectRaw($search)->search()->date()->courseSubscribes()->first();    }
     public function getAll($relations = [], $params = ['*'], $count = [])
     {
         return User::with($relations)->select($params)->withCount($count)->get();
