@@ -23,7 +23,7 @@ class EmailController extends Controller
 
         $email = Email::create($data);
         $email->save();
-            $supportEmail = isset(cache()->get('settings')['general_info']['support_phone'])?cache()->get('settings')['general_info']['support_email']:
+            $supportEmail = isset(cache()->get('settings')['general_info']['support_email'])?cache()->get('settings')['general_info']['support_email']:
 config('front_settings.general_info.support_email');
         Mail::to($supportEmail)->send (new VisitorContact($data));
 
