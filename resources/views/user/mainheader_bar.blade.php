@@ -323,7 +323,7 @@ if ($user) {
             @foreach($notifications as $notify)
                 @if(class_basename($notify) == "Message")
             <li>
-                <i class="fas fa-envelope"></i> <a  href="{{ route('user.message.index') }}" >{{ substr($notify->message,0 , 20) }} ...</a>
+                <i class="fas fa-envelope"></i> <a  href="{{ route('user.message.index') }}" >{!! substr($notify->message,0 , 20) !!} ...</a>
                 <a class="user-btn-sign-in"  href="{{ route('user.message.index') }}">الرد</a>
 
             </li>
@@ -331,7 +331,7 @@ if ($user) {
 
             <li>
                 <i class="fas fa-bell"></i>
-                <a href="{{ route('user.notification.all') }}">{{ substr($notify->data['title'],0 , 20 ) }} ...</a>
+                <a href="{{ route('user.notification.all') }}">{!! substr($notify->data['title'],0 , 20 ) !!} ...</a>
                 <a class="user-btn-sign-up edu-btn" style="color: white;height:44px;padding:0px 20px"  href="{{ route('user.notification.all') }}">قراءة</a>
             </li>
             @endif
