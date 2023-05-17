@@ -20,7 +20,7 @@ class SendMessageByEmailMail extends Mailable
      *
      * @return void
      */
-    public function __construct($message,$subject,$user,$sender='test@gmail.com')
+    public function __construct($message,$subject,$user,$sender='support.team@onlanguagecourses.com')
     {
         $this->text=$message;
         $this->subject=$subject;
