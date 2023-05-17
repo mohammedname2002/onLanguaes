@@ -169,7 +169,7 @@ class MessageRepository implements MessageInterface{
        $userrepo=new UserRepository();
 
         if(!$request->sendToAllusers){
-           $users=$userrepo->getmodel([],['name','email','id'],[])->whereIn('id',$request->users)->chunk(50,function($data) use($request){
+           $users=$userrepo->getmodel([],['name','email','id'],[])->whereIn('id',$request->users)->chunk(20,function($data) use($request){
                dispatch(new SendMessageByWebsiteJob($data,$request->message,$request->subject,$request->sender_id));
             });
         }
@@ -196,7 +196,7 @@ class MessageRepository implements MessageInterface{
     $sender=$request->sender;
 
     if(!$request->sendToAllusers){
-    $users=$userrepo->getmodel([],['name','email','id'],[])->whereIn('id',$request->users)->chunk(50,function($data) use($request,$sender){
+    $users=$userrepo->getmodel([],['name','email','id'],[])->whereIn('id',$request->users)->chunk(20,function($data) use($request,$sender){
        dispatch(new SendMessageByEmailJob($data,$request->message,$request->subject,$sender));
     });
     }
