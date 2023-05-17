@@ -23,7 +23,7 @@ class SendMessageByEmailJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($data,$message,$subject,$sender='test@gmail.com')
+    public function __construct($data,$message,$subject,$sender='support.team@onlanguagecourses.com')
     {
         $this->data=$data;
         $this->message=$message;
