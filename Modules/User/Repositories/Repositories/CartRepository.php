@@ -138,6 +138,7 @@ class CartRepository implements CartInterface{
             ]);
 
         }
+    
         \Cart::add(array(
             'id' => $package->id, // inique row ID
             'name' =>  $package->title_ar,

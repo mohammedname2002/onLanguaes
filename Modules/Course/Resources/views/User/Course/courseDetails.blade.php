@@ -478,14 +478,14 @@ OnLanguage Courses
                 console.log(cart)
 
 
-          if ($.isEmptyObject(data.error)) {
+       if (!data.error) {
               Toast.fire({
                   type: icon,
                   title: data.success?data.success:data.error
               })
           }else{
               Toast.fire({
-                  type: 'error',
+                  type: icon,
                   title: data.error
               })
           }
