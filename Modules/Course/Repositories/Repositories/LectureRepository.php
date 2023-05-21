@@ -195,7 +195,7 @@ class LectureRepository implements LectureInterface{
 
 
     public function showlectures($id){
-        $Lectures = Lecture::with('course:id,image')->where('visiable',1)->findOrFail($id);
+        $Lectures = Lecture::with('course:id,image,price,title_ar,title_en')->where('visiable',1)->findOrFail($id);
           $user = auth()->user()?auth()->user()->load(['notes'=>function($q) use($Lectures){
             $q->where('lecture_id',$Lectures->id);
           },'courses:id']):null;
@@ -227,7 +227,7 @@ class LectureRepository implements LectureInterface{
             if( ! \Cart::get($Lectures->course->id)){
               \Cart::add(array(
                 'id' => $Lectures->course->id, // inique row ID
-                'name' =>  $Lectures->course->title_en,
+                'name' =>app()->getLocale()=='en'? $Lectures->course->title_en:$Lectures->course->title_ar,
                 'price' =>$Lectures->course->price,
                 'quantity' => 1,
                 'attributes' => array()

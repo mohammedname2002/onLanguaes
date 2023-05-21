@@ -450,38 +450,39 @@ OnLanguage Courses
 // Eend Product View with Modal
  // Start Add To Cart Product
  function AddOneToCart(id) {
-    $.ajax({
-      type: "POST",
-      dataType: 'json',
-      data: {
-        id: id,
-      },
-      url: "/cart/data/course/store/",
-      success: function (data) {
-        const Toast = Swal.mixin({
-          toast: true,
-          showConfirmButton: false,
-          timer: 4000
+  $.ajax({
+    type: "POST",
+    dataType: 'json',
+    data: {
+      id: id,
+    },
+    url: "/cart/data/course/store/",
+    success: function (data) {
+      const Toast = Swal.mixin({
+        toast: true,
+        showConfirmButton: false,
+        timer: 4000
+      });
+
+      var cart = $('#cart_number');
+      cart.html(data.cart_count);
+      console.log(cart);
+
+      if ($.isEmptyObject(data.error)) {
+        Toast.fire({
+          icon: 'success',
+          title: data.success ? data.success : data.error
         });
-  
-        var cart = $('#cart_number');
-        cart.html(data.cart_count);
-        console.log(cart);
-  
-        if ($.isEmptyObject(data.error)) {
-          Toast.fire({
-            icon: 'success',
-            title: data.success ? data.success : data.error
-          });
-        } else {
-          Toast.fire({
-            icon: 'error',
-            title: data.error
-          });
-        }
+      } else {
+        Toast.fire({
+          icon: 'error',
+          title: data.error
+        });
       }
-    });
-  }
+      window.location.href="https://onlanguagecourses.com/cart"
+ }
+});
+}
   
     function likedVideos(){
         var id = "{{ $courseDetails->id }}"
