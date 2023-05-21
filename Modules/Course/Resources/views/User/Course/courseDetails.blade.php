@@ -7,7 +7,7 @@ OnLanguage Courses
 @section('css')
 <meta name="description" content="{{ trans('main_trans.seo_description') }}">
 <meta name="keywords" content="{{ $courseDetails->features }}">
-
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
  <style>
  
  
@@ -476,7 +476,9 @@ OnLanguage Courses
             var cart= $('#cart_number')
             cart.html(data.cart_count)
             console.log(cart)
-            $.isEmptyObject(data.error)
+            console.log($.isEmptyObject(data.error))
+
+          
 
 
   if ($.isEmptyObject(data.error)) {
