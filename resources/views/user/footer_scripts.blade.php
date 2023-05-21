@@ -17,7 +17,6 @@
     <script src="{{asset('assets/user/js/isotope.pkgd.min.js')}}"></script>
     <script src="{{asset('assets/user/js/imagesloaded.pkgd.min.js')}}"></script>
     <script src="{{asset('assets/user/js/main.js')}}"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
 
