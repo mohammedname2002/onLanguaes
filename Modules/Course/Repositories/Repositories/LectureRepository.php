@@ -226,9 +226,9 @@ class LectureRepository implements LectureInterface{
           
             if( ! \Cart::get($Lectures->course->id)){
               \Cart::add(array(
-                'id' => $package->id, // inique row ID
-                'name' =>  $package->title_ar,
-                'price' =>$package->price,
+                'id' => $Lectures->course->id, // inique row ID
+                'name' =>  $Lectures->course->title_en,
+                'price' =>$Lectures->course->price,
                 'quantity' => 1,
                 'attributes' => array()
           
