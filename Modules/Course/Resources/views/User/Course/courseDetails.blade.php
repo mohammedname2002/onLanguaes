@@ -483,11 +483,13 @@ OnLanguage Courses
               type: icon,
               title: data.success?data.success:data.error
           })
+
       }else{
           Toast.fire({
               type: 'error',
               title: data.error
           })
+          
       }
       // End Message
     }
