@@ -481,13 +481,13 @@ OnLanguage Courses
 
   if ($.isEmptyObject(data.error)) {
       Toast.fire({
-          type: icon,
+          icon: icon,
           title: data.success?data.success:data.error
       })
 
   }else{
       Toast.fire({
-          type: 'error',
+          icon: 'error',
           title: data.error
       })
       
@@ -525,7 +525,6 @@ OnLanguage Courses
 </script>
 
 
-<script src="{{ asset('js/notes.js') }}"></script>
 
 <script>
     function Share(share)
