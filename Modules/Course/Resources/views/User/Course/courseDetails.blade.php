@@ -454,15 +454,9 @@ OnLanguage Courses
       },
       url: "/cart/data/course/store/",
       success: function (data) {
-        let icon = 'success';
-        if (data.error) {
-          icon = 'error';
-        }
-  
         const Toast = Swal.mixin({
           toast: true,
           position: 'top-end',
-          icon: icon,
           showConfirmButton: false,
           timer: 4000
         });
@@ -473,7 +467,7 @@ OnLanguage Courses
   
         if ($.isEmptyObject(data.error)) {
           Toast.fire({
-            icon: icon,
+            icon: 'success',
             title: data.success ? data.success : data.error
           });
         } else {
@@ -485,6 +479,7 @@ OnLanguage Courses
       }
     });
   }
+  
     function likedVideos(){
         var id = "{{ $courseDetails->id }}"
         $.ajax({
