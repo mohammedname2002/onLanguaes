@@ -478,25 +478,26 @@ OnLanguage Courses
             console.log(cart)
 
 
-      if ($.isEmptyObject(data.error)) {
-          Toast.fire({
-              type: icon,
-              title: data.success?data.success:data.error
-          })
 
-      }else{
-          Toast.fire({
-              type: 'error',
-              title: data.error
-          })
-          
-      }
-      // End Message
-    }
+  if ($.isEmptyObject(data.error)) {
+      Toast.fire({
+          type: icon,
+          title: data.success?data.success:data.error
+      })
 
-    })
+  }else{
+      Toast.fire({
+          type: 'error',
+          title: data.error
+      })
+      
+  }
+  // End Message
 }
+      // End Message
+    })
 
+    }
     function likedVideos(){
         var id = "{{ $courseDetails->id }}"
         $.ajax({
