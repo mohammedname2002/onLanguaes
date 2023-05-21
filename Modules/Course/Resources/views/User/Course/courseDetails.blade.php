@@ -445,61 +445,46 @@ OnLanguage Courses
 
 // Eend Product View with Modal
  // Start Add To Cart Product
- function AddOneToCart(id){
+ function AddOneToCart(id) {
     $.ajax({
-        type: "POST",
-        dataType: 'json',
-        data:{
-            id:id,
-        },
-
-        url: "/cart/data/course/store/",
-        success:function(data){
-
-
-            let icon='success'
-            if(data.error)
-            {
-                icon='error'
-
-            }
-
-          // Start Message
-          const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            icon: icon,
-            showConfirmButton: false,
-            timer: 4000
-          })
-
-            var cart= $('#cart_number')
-            cart.html(data.cart_count)
-            console.log(cart)
-            console.log($.isEmptyObject(data.error))
-
-          
-
-
-  if ($.isEmptyObject(data.error)) {
-      Toast.fire({
+      type: "POST",
+      dataType: 'json',
+      data: {
+        id: id,
+      },
+      url: "/cart/data/course/store/",
+      success: function (data) {
+        let icon = 'success';
+        if (data.error) {
+          icon = 'error';
+        }
+  
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
           icon: icon,
-          title: data.success?data.success:data.error
-      })
-
-  }else{
-      Toast.fire({
-          icon: 'error',
-          title: data.error
-      })
-      
+          showConfirmButton: false,
+          timer: 4000
+        });
+  
+        var cart = $('#cart_number');
+        cart.html(data.cart_count);
+        console.log(cart);
+  
+        if ($.isEmptyObject(data.error)) {
+          Toast.fire({
+            icon: icon,
+            title: data.success ? data.success : data.error
+          });
+        } else {
+          Toast.fire({
+            icon: 'error',
+            title: data.error
+          });
+        }
+      }
+    });
   }
-  // End Message
-}
-      // End Message
-    })
-
-    }
     function likedVideos(){
         var id = "{{ $courseDetails->id }}"
         $.ajax({
