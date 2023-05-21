@@ -230,11 +230,16 @@ OnLanguage Courses
 
             </div>
 
+            @if(App::getLocale() == 'en')
 
             <div class="buynow">
                 <button type="submit" onclick="AddOneToCart({{ $courseDetails->id }})"> Buy Now</button>
             </div>
-            
+            @else
+            <div class="buynow">
+                <button type="submit" onclick="AddOneToCart({{ $courseDetails->id }})"> شراء الان</button>
+            </div>
+            @endif
             @auth
 
             <div class="comments">

@@ -2,11 +2,20 @@
 
 namespace Modules\Course\Repositories\Repositories;
 
-use Modules\Course\Entities\Lecture;
 use Modules\Course\Entities\Note;
+use Modules\Course\Entities\Course;
+use Illuminate\Support\Facades\Auth;
+use Modules\Course\Entities\Lecture;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Modules\Course\Repositories\Interfaces\LectureInterface;
+use Darryldecode\Cart\Cart;
+use Modules\User\Entities\Payment;
+use Modules\Course\Entities\Language;
+use Illuminate\Support\Facades\Request;
+use Modules\User\Repositories\Interfaces\PaymentRepositoryInterface;
+use Modules\User\Repositories\Interfaces\CartInterface;
+use Illuminate\Routing\Controller;
 
 class LectureRepository implements LectureInterface{
     protected $path='images\lectures';
@@ -188,37 +197,71 @@ class LectureRepository implements LectureInterface{
 
 
 
+    public function showlectures($id){
+        $Lectures = Lecture::with('course:id,image')->where('visiable',1)->findOrFail($id);
+          $user = auth()->user()?auth()->user()->load(['notes'=>function($q) use($Lectures){
+            $q->where('lecture_id',$Lectures->id);
+          },'courses:id']):null;
+          $user_courses=[];
+          if($user && $user->courses)
+           $user_courses=$user->courses->pluck('id')->toArray();
+        $notes=[];
+        if($user && $user->notes)
+        $notes=$user->notes;
+        if($Lectures->type == '1' && !in_array($Lectures->course_id , $user_courses))
+        {
+          if ($user) {
+            $courses=$user->courses;     
+            if(! \Cart::session($user->id)->get($Lectures->course_id)){
+              \Cart::session($user->id)->add(array(
+                'id' => $package->id, // inique row ID
+                'name' =>  $package->title_ar,
+                'price' =>$package->price,
+                'quantity' => 1,
+                'attributes' => array()
+            ));
+            }
+            
+          } else {
+          
+            if( ! \Cart::get($Lectures->course->id)){
+              \Cart::add(array(
+                'id' => $package->id, // inique row ID
+                'name' =>  $package->title_ar,
+                'price' =>$package->price,
+                'quantity' => 1,
+                'attributes' => array()
+            ));
+            }
+          
+          }
+          return redirect()->route('cart.details');
+          
+        }
+       
+      
+      
+      
+      
+      
+      
+      
+      $recentLectures = Lecture::where('visiable',1)->where('course_id' ,$Lectures->course_id )->where('id','<>' ,$id)->orderBy('order')->get();
+      
+           $Lectures->visit();
+            return view('course::User.Lecture.lecture',[
+                'Lectures'=>$Lectures,
+                'notes'=>$notes,
+      
+                'user_courses'=>$user_courses,
+                'recentLectures'=>$recentLectures,
+      ]);
+      
+      
+      
+      
+      }
 
-
-public function showlectures($id){
-    $Lectures = Lecture::with('course:id,image')->where('visiable',1)->findOrFail($id);
-      $user = auth()->user()?auth()->user()->load(['notes'=>function($q) use($Lectures){
-        $q->where('lecture_id',$Lectures->id);
-      },'courses:id']):null;
-      $user_courses=[];
-      if($user && $user->courses)
-       $user_courses=$user->courses->pluck('id')->toArray();
-    $notes=[];
-    if($user && $user->notes)
-    $notes=$user->notes;
-    if($Lectures->type == '1' && !in_array($Lectures->course_id , $user_courses))
-    return redirect()->back()->with(['error'=>'عذرا انت غير مشترك في هذه الدورة ']);
-
-$recentLectures = Lecture::where('visiable',1)->where('course_id' ,$Lectures->course_id )->where('id','<>' ,$id)->orderBy('order')->get();
-
-       $Lectures->visit();
-        return view('course::User.Lecture.lecture',[
-            'Lectures'=>$Lectures,
-            'notes'=>$notes,
-
-            'user_courses'=>$user_courses,
-            'recentLectures'=>$recentLectures,
-        ]);
-
-
-
-
-}
 
 
 
