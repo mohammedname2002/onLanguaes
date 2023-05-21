@@ -214,21 +214,20 @@ class LectureRepository implements LectureInterface{
             $courses=$user->courses;     
             if(! \Cart::session($user->id)->get($Lectures->course_id)){
               \Cart::session($user->id)->add(array(
-                'id' => $package->id, // inique row ID
-                'name' =>  $package->title_ar,
-                'price' =>$package->price,
+                'id' => $Lectures->course->id, // inique row ID
+                'name' => $Lectures->course->title_en,
+                'price' =>$Lectures->course->price,
                 'quantity' => 1,
                 'attributes' => array()
             ));
             }
-            
           } else {
           
             if( ! \Cart::get($Lectures->course->id)){
               \Cart::add(array(
-                'id' => $package->id, // inique row ID
-                'name' =>  $package->title_ar,
-                'price' =>$package->price,
+                'id' => $Lectures->course->id, // inique row ID
+                'name' => $Lectures->course->title_en,
+                'price' =>$Lectures->course->price,
                 'quantity' => 1,
                 'attributes' => array()
             ));
