@@ -7,7 +7,7 @@ OnLanguage Courses
 @section('css')
 <meta name="description" content="{{ trans('main_trans.seo_description') }}">
 <meta name="keywords" content="{{ $courseDetails->features }}">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
  <style>
  
  
