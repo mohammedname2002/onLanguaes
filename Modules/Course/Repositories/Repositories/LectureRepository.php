@@ -194,9 +194,6 @@ class LectureRepository implements LectureInterface{
 
 
 
-
-
-
     public function showlectures($id){
         $Lectures = Lecture::with('course:id,image')->where('visiable',1)->findOrFail($id);
           $user = auth()->user()?auth()->user()->load(['notes'=>function($q) use($Lectures){
@@ -210,41 +207,42 @@ class LectureRepository implements LectureInterface{
         $notes=$user->notes;
         if($Lectures->type == '1' && !in_array($Lectures->course_id , $user_courses))
         {
+      
           if ($user) {
             $courses=$user->courses;     
+          
             if(! \Cart::session($user->id)->get($Lectures->course_id)){
               \Cart::session($user->id)->add(array(
                 'id' => $Lectures->course->id, // inique row ID
-                'name' => $Lectures->course->title_en,
+                'name' =>app()->getLocale()=='en'? $Lectures->course->title_en:$Lectures->course->title_ar,
                 'price' =>$Lectures->course->price,
                 'quantity' => 1,
                 'attributes' => array()
+          
             ));
             }
+            
           } else {
           
             if( ! \Cart::get($Lectures->course->id)){
               \Cart::add(array(
-                'id' => $Lectures->course->id, // inique row ID
-                'name' => $Lectures->course->title_en,
-                'price' =>$Lectures->course->price,
+                'id' => $package->id, // inique row ID
+                'name' =>  $package->title_ar,
+                'price' =>$package->price,
                 'quantity' => 1,
                 'attributes' => array()
+          
             ));
             }
           
-          }
-          return redirect()->route('cart.details');
           
+          }
+      
+          return redirect()->route('cart.details');          
+      
         }
        
-      
-      
-      
-      
-      
-      
-      
+    
       $recentLectures = Lecture::where('visiable',1)->where('course_id' ,$Lectures->course_id )->where('id','<>' ,$id)->orderBy('order')->get();
       
            $Lectures->visit();
@@ -260,7 +258,6 @@ class LectureRepository implements LectureInterface{
       
       
       }
-
 
 
 
