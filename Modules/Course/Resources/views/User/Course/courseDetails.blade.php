@@ -262,7 +262,7 @@ OnLanguage Courses
                     <textarea required name="review" placeholder="Your review"
                     class="comment-input comment-textarea mb-20"></textarea>
                 <div class="comment-submit">
-                    <button type="submit" class="edu-btn">Submit</button>
+                    <button type="submit" class="edu-btn">ارسال</button>
                 </div>
                 </form>
 

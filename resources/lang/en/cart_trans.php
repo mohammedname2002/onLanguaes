@@ -18,6 +18,8 @@ return[
 
 
     'cart_process'=>'Proceed to checkout',
+'success'=>'Courses that have not been purchased have been added to the cart',
+ 'already'=>'The course is already in your courses',
 
-
+ 'onesuccess'=>'Successfully added Course in cart'
 ];

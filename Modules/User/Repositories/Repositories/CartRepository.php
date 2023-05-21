@@ -85,7 +85,7 @@ class CartRepository implements CartInterface{
 
 
         return response()->json(
-            ['success' => 'Courses that have not been purchased have been added to the cart',
+            ['success' => trans('cart_trans.success'),
             'cart_count'=>$cart_count
         ]);
 
@@ -116,7 +116,7 @@ class CartRepository implements CartInterface{
 
         if($courses->find($request->id)){
             return response()->json(
-                ['error' => 'The course is already in your courses',
+                ['error' => trans('cart_trans.already'),
                 'cart_count'=>$cart_count
             ]);
 
@@ -133,7 +133,7 @@ class CartRepository implements CartInterface{
 
         if(\Cart::get($request->id)){
             return response()->json(
-                ['error' => 'The course is already in your courses',
+                ['error' => trans('cart_trans.already'),
                 'cart_count'=>$cart_count
             ]);
 
@@ -151,7 +151,7 @@ class CartRepository implements CartInterface{
 
 
 
-        return response()->json(['success' => 'Successfully added Course in cart',
+        return response()->json(['success' => trans('cart_trans.onesuccess'),
         'cart_count'=>$cart_count+1
     ]);
 
