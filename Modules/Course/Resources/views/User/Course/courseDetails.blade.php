@@ -476,7 +476,7 @@ OnLanguage Courses
             var cart= $('#cart_number')
             cart.html(data.cart_count)
             console.log(cart)
-
+            $.isEmptyObject(data.error)
 
 
   if ($.isEmptyObject(data.error)) {
