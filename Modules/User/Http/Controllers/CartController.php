@@ -68,9 +68,9 @@ class CartController extends Controller
         list($total , $cart) =  $this->cartRepo->checkout_details();
 
         if($cart->count()==0)
-        return redirect()->back()->with('error','حدث خطأ ما ');
+        return redirect()->route('checkout.details')->with('error','حدث خطأ ما ');
                return view('user::User.Cart.checkout',[
-                
+
              'total'=>$total,
              'cart'=>$cart,
  ]);
