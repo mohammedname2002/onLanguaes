@@ -31,6 +31,7 @@ use Modules\User\Http\Requests\otherPaymentRequest;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Modules\User\Repositories\Interfaces\PaymentRepositoryInterface;
+use Exception;
 
 use Modules\User\Repositories\Repositories\UserRepository;
 
@@ -41,6 +42,8 @@ class PaymentController extends Controller
     public function payment()
 
     {
+
+          try{
         $user=auth()->user()->id;
 
        $cart = \Cart::session($user)->getContent();
@@ -54,8 +57,8 @@ class PaymentController extends Controller
 
             ],
             'mode' => 'payment',
-            'success_url' => 'http://localhost:8000/confirm/payment/'.auth()->user()->email."?session_id={CHECKOUT_SESSION_ID}",
-            'cancel_url' => 'http://localhost:8000',
+            'success_url' => 'https://onlanguagecourses.com/confirm/payment/'.auth()->user()->email."?session_id={CHECKOUT_SESSION_ID}",
+            'cancel_url' => 'https://onlanguagecourses.com',
         ];
         foreach($cart as $cart_item){
             $items["line_items"][]=[
@@ -77,6 +80,11 @@ class PaymentController extends Controller
         $session = \Stripe\Checkout\Session::create($items);
 
         return redirect()->to($session->url);
+    }catch(Exception $e)
+    {
+       return redirect()->route('cart.details')->with('error' ,  trans('cart_trans.carterror')) ;   
+    
+    }
 
     }
 
@@ -87,6 +95,7 @@ class PaymentController extends Controller
 
     public function various_payment(){
 
+        try{
 
         $settings=cache()->get('settings') && isset(cache()->get('settings')['subscribes_page'])?cache()->get('settings')['subscribes_page']:config('front_settings.subscribes_page');
 
@@ -103,17 +112,23 @@ class PaymentController extends Controller
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => 'http://localhost:8000/variousPayment/payment/confirm?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => 'http://localhost:8000',
+            'success_url' => 'https://onlanguagecourses.com/variousPayment/payment/confirm?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => 'https://onlanguagecourses.com',
         ]);
 
 
         return redirect()->to($session->url);
 
-
+    }catch(Exception $e)
+    {
+       return redirect()->route('home')->with('error' ,  trans('cart_trans.carterror')) ;   
+    
+    }
     }
 
     public function confirmPayment(Request $request ,$email){
+        try{
+
         \Stripe\Stripe::setApiKey(config('services.stripe.secret_key'));
 
         $session = \Stripe\Checkout\Session::retrieve($request->get('session_id'));
@@ -167,7 +182,11 @@ class PaymentController extends Controller
 
 
         return redirect()->route('user.myCourses')->with('success',  trans('alertMessage.buyCourse') );
-
+    }catch(Exception $e)
+    {
+       return redirect()->route('cart.details')->with('error' ,  trans('cart_trans.carterror')) ;   
+    
+    }
 }
 
 
@@ -176,6 +195,8 @@ class PaymentController extends Controller
 
     public function variousPaymentConfirm(Request $request)
     {
+        try{
+
         $plan = ModelsPlan::where('plan_id', 'price_1MzkIrFaFUqOAhzblSex1o0L')->first();
 
         if(auth()->user()->subscribed($plan->name)){
@@ -231,13 +252,21 @@ class PaymentController extends Controller
 
 
 
-        return redirect()->route('user.paidPlayList')->with('success','Thank you for your Payment');
+        return redirect()->route('user.paidPlayList')->with('success',trans('cart_trans.thx'));
 
+    }catch(Exception $e)
+    {
+       return redirect()->route('user.paidPlayList')->with('error' ,  trans('cart_trans.carterror4')) ;   
+    
+    }
 
 
     }
     public function cancelSubscription()
     {
+
+        try{
+
     $plan = ModelsPlan::where('plan_id', 'price_1MzkIrFaFUqOAhzblSex1o0L')->first();
     $user = auth()->user();
     if ($plan && $user->subscribed($plan->name)) {
@@ -248,12 +277,21 @@ class PaymentController extends Controller
     toastr('عذرا انت غير مشترك في خدمة الفيديوهات المدفوعة ');
     return redirect()->back();
 
+}catch(Exception $e)
+{
+   return redirect()->route('subscription.Info')->with('error' , trans('cart_trans.carterror3')) ;   
+
+}
+
     }
     public function unSubscribed(){
-        toastr('Please TO watch the paid videos you must subscribed first','warning');
+
+        toastr( trans('cart_trans.plz'),'warning');
         return view('course::User.Various.Paid.unsubscribed',[
             'intent' => auth()->user()->createSetupIntent(),
         ]);
+
+        
     }
 
 
@@ -261,6 +299,7 @@ class PaymentController extends Controller
 
       public function otherPayment(otherPaymentRequest $request){
 
+          try{
 
 
         \Stripe\Stripe::setApiKey(config('services.stripe.secret_key'));
@@ -276,17 +315,24 @@ class PaymentController extends Controller
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => 'http://localhost:8000/otherPayment/Confirm?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => 'http://localhost:8000',
+            'success_url' => 'https://onlanguagecourses.com/otherPayment/Confirm?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => 'https://onlanguagecourses.com',
         ]);
 
 
         return redirect()->to($session->url);
 
-
+    }catch(Exception $e)
+    {
+       return redirect()->route('other.payment')->with('error' , trans('cart_trans.send')) ;   
+    
+    }
       }
 
       public function otherPaymentConfirm(Request $request){
+        try{
+
+
         \Stripe\Stripe::setApiKey(config('services.stripe.secret_key'));
 
         $session = \Stripe\Checkout\Session::retrieve($request->get('session_id'));
@@ -311,7 +357,11 @@ class PaymentController extends Controller
 
          return redirect()->route('home')->with('success', ' thank you for pay');;
 
-
+        }catch(Exception $e)
+        {
+           return redirect()->route('other.payment')->with('error' , trans('cart_trans.send')) ;   
+        
+        }
 
       }
        public function privatePayment(){
@@ -320,4 +370,3 @@ class PaymentController extends Controller
        }
 
         }
-

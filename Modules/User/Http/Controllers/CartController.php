@@ -65,16 +65,15 @@ class CartController extends Controller
 
 
     public function checkout_details(){
+        list($total , $cart) =  $this->cartRepo->checkout_details();
 
-      list($total , $cart) =  $this->cartRepo->checkout_details();
-
-
-        return view('user::User.Cart.checkout',[
-            'total'=>$total,
-            'cart'=>$cart,
-
-
-        ]);
+        if($cart->count()==0)
+        return redirect()->back()->with('error','حدث خطأ ما ');
+               return view('user::User.Cart.checkout',[
+                
+             'total'=>$total,
+             'cart'=>$cart,
+ ]);
 
 
     }

@@ -3,6 +3,7 @@
 namespace Modules\User\Repositories\Repositories;
 
 
+use Exception;
 
 use Darryldecode\Cart\Cart;
 use Modules\User\Entities\Payment;
@@ -159,6 +160,8 @@ class CartRepository implements CartInterface{
 
     }
     public function removeCart($id){
+        try{
+
         $user=Auth::user();
         if ($user) {
           \Cart::session($user->id)->remove($id);
@@ -170,11 +173,16 @@ class CartRepository implements CartInterface{
 
         }
         return $cart ;
-
+    }catch(Exception $e)
+    {
+       return redirect()->route('cart.details')->with('error' ,trans('cart_trans.carterror2')) ;   
+    
+    }
 
 
     }
     public function cartDetails(){
+        try{
 
         $user=Auth::user();
 
@@ -193,9 +201,15 @@ class CartRepository implements CartInterface{
         $cart =$cart;
 
          return $cart;
+        }catch(Exception $e)
+        {
+           return redirect()->route('cart.details')->with('error' ,trans('cart_trans.carterror1')) ;   
+        
+        }
 
     }
 public function checkout_details(){
+    try{
 
 
   $user=Auth::user();
@@ -216,7 +230,11 @@ public function checkout_details(){
 
 
               return [$total ,$cart ];
-
+            }catch(Exception $e)
+            {
+               return redirect()->route('cart.details')->with('error' , trans('cart_trans.carterror')) ;   
+            
+            }
 
     }
 }
